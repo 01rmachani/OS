@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+  <defs>
+    <radialGradient id="a1" cx="30%" cy="40%" r="70%">
+      <stop offset="0%" stop-color="#7c6af7" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#0a0a0f" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="a2" cx="70%" cy="60%" r="60%">
+      <stop offset="0%" stop-color="#06b6d4" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#0a0a0f" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="a3" cx="50%" cy="20%" r="50%">
+      <stop offset="0%" stop-color="#a855f7" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#0a0a0f" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="a4" cx="80%" cy="20%" r="40%">
+      <stop offset="0%" stop-color="#10b981" stop-opacity="0.1"/>
+      <stop offset="100%" stop-color="#0a0a0f" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1920" height="1080" fill="#05050d"/>
+  <rect width="1920" height="1080" fill="url(#a1)"/>
+  <rect width="1920" height="1080" fill="url(#a2)"/>
+  <rect width="1920" height="1080" fill="url(#a3)"/>
+  <rect width="1920" height="1080" fill="url(#a4)"/>
+</svg>
