@@ -88,7 +88,7 @@ export const MonacoIDEApp = {
               <div class="ide-welcome-tips">
                 <div class="ide-welcome-tip"><kbd>Ctrl</kbd>+<kbd>S</kbd> Save</div>
                 <div class="ide-welcome-tip"><kbd>Ctrl</kbd>+<kbd>\</kbd> Split</div>
-                <div class="ide-welcome-tip"><kbd>Ctrl</kbd>+<kbd>`</kbd> Terminal</div>
+                <div class="ide-welcome-tip"><kbd>Ctrl</kbd>+<kbd>&#96;</kbd> Terminal</div>
                 <div class="ide-welcome-tip"><kbd>F1</kbd> Command Palette</div>
               </div>
             </div>
