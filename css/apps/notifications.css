@@ -1,0 +1,5 @@
+/* Notifications App CSS - placeholder, main styles in taskbar.css */
+.notif-item.type-info    { border-left: 3px solid var(--accent-primary); }
+.notif-item.type-success { border-left: 3px solid #28c840; }
+.notif-item.type-warning { border-left: 3px solid #febc2e; }
+.notif-item.type-error   { border-left: 3px solid #ff5f57; }

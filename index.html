@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="BrowserOS - A fully-featured operating system running in your browser">
+  <meta name="theme-color" content="#7c6af7">
+  <title>BrowserOS</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- CSS files (in order) -->
+  <link rel="stylesheet" href="css/os.css">
+  <link rel="stylesheet" href="css/desktop.css">
+  <link rel="stylesheet" href="css/windows.css">
+  <link rel="stylesheet" href="css/taskbar.css">
+  <link rel="stylesheet" href="css/apps/filemanager.css">
+  <link rel="stylesheet" href="css/apps/editor.css">
+  <link rel="stylesheet" href="css/apps/graph.css">
+  <link rel="stylesheet" href="css/apps/wiki.css">
+  <link rel="stylesheet" href="css/apps/terminal.css">
+  <link rel="stylesheet" href="css/apps/ide.css">
+  <link rel="stylesheet" href="css/apps/settings.css">
+  <link rel="stylesheet" href="css/apps/notifications.css">
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json">
+
+  <!-- highlight.js theme -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.11.1/styles/github-dark.min.css">
+</head>
+<body>
+
+  <!-- Boot Screen -->
+  <div id="boot-screen">
+    <div class="boot-content">
+      <div class="boot-logo">
+        <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="64" height="64" rx="16" fill="url(#bootGrad)"/>
+          <rect x="12" y="12" width="16" height="16" rx="3" fill="rgba(255,255,255,0.9)"/>
+          <rect x="36" y="12" width="16" height="16" rx="3" fill="rgba(255,255,255,0.6)"/>
+          <rect x="12" y="36" width="16" height="16" rx="3" fill="rgba(255,255,255,0.6)"/>
+          <rect x="36" y="36" width="16" height="16" rx="3" fill="rgba(255,255,255,0.9)"/>
+          <defs>
+            <linearGradient id="bootGrad" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#7c6af7"/>
+              <stop offset="100%" stop-color="#06b6d4"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <span class="boot-logo-text">BrowserOS</span>
+      </div>
+      <div class="boot-loader">
+        <div class="boot-loader-bar"></div>
+      </div>
+      <div class="boot-version">v1.0.0</div>
+    </div>
+  </div>
+
+  <!-- Desktop -->
+  <div id="desktop" class="wallpaper-default">
+
+    <!-- Desktop Icon Grid -->
+    <div id="desktop-icons">
+      <!-- Icons are populated by JS -->
+    </div>
+
+    <!-- Window Container -->
+    <div id="window-container"></div>
+
+    <!-- Snap Preview Overlay -->
+    <div id="snap-preview" class="hidden"></div>
+
+  </div>
+
+  <!-- Taskbar -->
+  <div id="taskbar">
+
+    <!-- Start Button -->
+    <button id="start-btn" aria-label="Start Menu" title="Start Menu">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="2" y="2" width="7" height="7" rx="1.5" fill="white"/>
+        <rect x="11" y="2" width="7" height="7" rx="1.5" fill="rgba(255,255,255,0.7)"/>
+        <rect x="2" y="11" width="7" height="7" rx="1.5" fill="rgba(255,255,255,0.7)"/>
+        <rect x="11" y="11" width="7" height="7" rx="1.5" fill="white"/>
+      </svg>
+    </button>
+
+    <!-- Running Apps -->
+    <div id="running-apps"></div>
+
+    <!-- System Tray -->
+    <div id="system-tray">
+      <button id="notifications-btn" aria-label="Notifications" title="Notifications">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M8 1.5a5 5 0 0 0-5 5v2.5l-1 2h12l-1-2V6.5a5 5 0 0 0-5-5Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+          <path d="M6.5 13a1.5 1.5 0 0 0 3 0" stroke="currentColor" stroke-width="1.5"/>
+        </svg>
+        <span id="notification-badge" class="hidden">0</span>
+      </button>
+      <div id="clock" title="Click for date">
+        <span id="clock-time">12:00</span>
+        <span id="clock-period">PM</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Start Menu -->
+  <div id="start-menu" class="hidden" role="dialog" aria-label="Start Menu">
+    <div class="start-menu-header">
+      <input
+        type="text"
+        class="start-search"
+        placeholder="Search apps, files, commands..."
+        aria-label="Search"
+        autocomplete="off"
+        spellcheck="false"
+      >
+    </div>
+    <div class="start-menu-body">
+      <div class="start-menu-section-label">Applications</div>
+      <div class="start-menu-grid" id="start-menu-grid">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+    <div class="start-menu-footer">
+      <button class="start-menu-action" id="start-shutdown" title="Shutdown">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+          <path d="M8 1v7M5 3.07A6 6 0 1 0 11 3.07" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        Power
+      </button>
+      <button class="start-menu-action" id="start-settings" title="Settings">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+          <circle cx="8" cy="8" r="2" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M8 1v1.5M8 13.5V15M1 8h1.5M13.5 8H15M3.05 3.05l1.06 1.06M11.89 11.89l1.06 1.06M3.05 12.95l1.06-1.06M11.89 4.11l1.06-1.06" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        Settings
+      </button>
+    </div>
+  </div>
+
+  <!-- Context Menu -->
+  <div id="context-menu" class="hidden" role="menu">
+    <!-- Populated by JS -->
+  </div>
+
+  <!-- Command Palette -->
+  <div id="command-palette" class="hidden" role="dialog" aria-label="Command Palette">
+    <div class="cp-backdrop"></div>
+    <div class="cp-dialog">
+      <div class="cp-search-row">
+        <svg class="cp-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <circle cx="6.5" cy="6.5" r="4.5" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M10 10l4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <input
+          type="text"
+          id="cp-input"
+          placeholder="Type a command or search..."
+          autocomplete="off"
+          spellcheck="false"
+          aria-label="Command input"
+        >
+        <kbd class="cp-kbd">ESC</kbd>
+      </div>
+      <div id="cp-results" class="cp-results"></div>
+    </div>
+  </div>
+
+  <!-- Notification Panel -->
+  <div id="notification-panel" role="complementary" aria-label="Notifications">
+    <div class="notif-header">
+      <span class="notif-title">Notifications</span>
+      <button class="notif-clear-all" id="notif-clear-all">Clear all</button>
+    </div>
+    <div id="notif-list" class="notif-list">
+      <!-- Populated by JS -->
+    </div>
+    <div class="notif-empty" id="notif-empty">
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none" opacity="0.3">
+        <path d="M16 3a10 10 0 0 0-10 10v5l-2 4h24l-2-4v-5A10 10 0 0 0 16 3Z" stroke="currentColor" stroke-width="1.5"/>
+        <path d="M13 26a3 3 0 0 0 6 0" stroke="currentColor" stroke-width="1.5"/>
+      </svg>
+      <p>No notifications</p>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toast-container" aria-live="polite" aria-atomic="false"></div>
+
+  <!-- CDN Libraries (non-module, must load before modules) -->
+  <script src="https://cdn.jsdelivr.net/npm/dexie@4.4.2/dist/dexie.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.3.0/dist/fuse.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked@15.0.0/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.11.1/build/highlight.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+
+  <!-- Main OS entry point -->
+  <script type="module" src="js/os.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,36 @@
+{
+  "name": "BrowserOS — Knowledge Graph Edition",
+  "short_name": "BrowserOS",
+  "description": "A fully-featured OS running in the browser with markdown notes, knowledge graph, wiki, terminal, and more.",
+  "start_url": "/OS/",
+  "scope": "/OS/",
+  "display": "standalone",
+  "orientation": "landscape",
+  "background_color": "#0a0a0f",
+  "theme_color": "#7c6af7",
+  "lang": "en",
+  "categories": ["productivity", "utilities"],
+  "icons": [
+    {
+      "src": "assets/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Open File Manager",
+      "short_name": "Files",
+      "description": "Open the virtual file manager",
+      "url": "/OS/?app=filemanager"
+    },
+    {
+      "name": "Open Knowledge Graph",
+      "short_name": "Graph",
+      "description": "Visualize note connections",
+      "url": "/OS/?app=graph"
+    }
+  ]
+}

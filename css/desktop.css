@@ -1,0 +1,251 @@
+/* =========================================================
+   BrowserOS — Desktop Styles
+   desktop.css: wallpaper, icon grid, snap preview
+   ========================================================= */
+
+/* ---------------------------------------------------------
+   Desktop Base
+   --------------------------------------------------------- */
+#desktop {
+  position: fixed;
+  inset: 0;
+  bottom: var(--taskbar-height);
+  overflow: hidden;
+
+  /* Default wallpaper */
+  background: radial-gradient(ellipse at 20% 50%, #1a0533 0%, #0a0a0f 50%, #001a2e 100%);
+
+  /* Subtle noise texture overlay */
+  background-color: #0a0a0f;
+}
+
+/* Wallpaper variants */
+#desktop.wallpaper-default {
+  background: radial-gradient(ellipse at 20% 50%, #1a0533 0%, #0a0a0f 50%, #001a2e 100%);
+}
+
+#desktop.wallpaper-aurora {
+  background-image: url('../assets/wallpapers/aurora.svg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+#desktop.wallpaper-grid {
+  background-color: #070710;
+  background-image: url('../assets/wallpapers/grid-dark.svg');
+  background-size: 40px 40px;
+  background-position: center;
+}
+
+#desktop.wallpaper-gradient {
+  background-image: url('../assets/wallpapers/gradient-dark.svg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Light theme wallpaper adjustments */
+html.light-theme #desktop.wallpaper-default {
+  background: radial-gradient(ellipse at 30% 40%, #e8e0ff 0%, #f0f0f5 50%, #e0f0ff 100%);
+}
+
+html.light-theme #desktop.wallpaper-grid {
+  background-color: #f0f0f5;
+  filter: invert(1) hue-rotate(180deg);
+}
+
+/* ---------------------------------------------------------
+   Desktop Icon Grid
+   --------------------------------------------------------- */
+#desktop-icons {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 80px);
+  grid-auto-rows: 90px;
+  gap: 4px;
+  align-content: start;
+  width: 100%;
+  /* Icons only fill left column area */
+  max-width: 360px;
+}
+
+/* ---------------------------------------------------------
+   Desktop Icon Item
+   --------------------------------------------------------- */
+.desktop-icon {
+  width: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 4px 6px;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition:
+    background var(--transition-fast),
+    transform var(--transition-fast);
+  border: 1px solid transparent;
+  -webkit-user-drag: none;
+}
+
+.desktop-icon:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.desktop-icon:active {
+  transform: scale(0.94);
+}
+
+.desktop-icon.selected {
+  background: rgba(124, 106, 247, 0.2);
+  border-color: rgba(124, 106, 247, 0.4);
+}
+
+.desktop-icon.selected .icon-label {
+  background: rgba(124, 106, 247, 0.5);
+  border-radius: var(--radius-sm);
+  padding: 0 4px;
+}
+
+/* Icon image area */
+.desktop-icon .icon-img {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: var(--radius-md);
+  transition: transform var(--transition-fast), filter var(--transition-fast);
+}
+
+.desktop-icon:hover .icon-img {
+  transform: translateY(-2px);
+  filter: drop-shadow(0 6px 16px rgba(124, 106, 247, 0.4));
+}
+
+.desktop-icon .icon-img svg,
+.desktop-icon .icon-img img {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+}
+
+/* Icon label */
+.desktop-icon .icon-label {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--text-primary);
+  text-align: center;
+  line-height: 1.3;
+  max-width: 76px;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8), 0 0 12px rgba(0, 0, 0, 0.5);
+  word-break: break-word;
+  transition: background var(--transition-fast), padding var(--transition-fast);
+}
+
+/* ---------------------------------------------------------
+   Snap Preview Overlay
+   --------------------------------------------------------- */
+#snap-preview {
+  position: fixed;
+  top: 0;
+  bottom: var(--taskbar-height);
+  pointer-events: none;
+  z-index: 8999;
+  border: 2px solid var(--accent-primary);
+  border-radius: var(--radius-lg);
+  background: rgba(124, 106, 247, 0.08);
+  backdrop-filter: blur(2px);
+  transition:
+    left var(--transition-fast),
+    width var(--transition-fast),
+    opacity var(--transition-fast);
+}
+
+#snap-preview.snap-left {
+  left: 0;
+  width: 50%;
+}
+
+#snap-preview.snap-right {
+  left: 50%;
+  width: 50%;
+}
+
+#snap-preview.snap-maximize {
+  left: 0;
+  width: 100%;
+  border-radius: 0;
+}
+
+/* ---------------------------------------------------------
+   Desktop Selection Rectangle
+   --------------------------------------------------------- */
+#desktop-selection {
+  position: fixed;
+  border: 1px solid var(--accent-primary);
+  background: rgba(124, 106, 247, 0.1);
+  border-radius: 2px;
+  pointer-events: none;
+  z-index: 8998;
+}
+
+/* ---------------------------------------------------------
+   Desktop Context Menu hint text
+   --------------------------------------------------------- */
+.desktop-no-icons-hint {
+  position: absolute;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--text-muted);
+  font-size: 13px;
+  text-align: center;
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+/* ---------------------------------------------------------
+   Wallpaper-specific fine-tuning
+   --------------------------------------------------------- */
+
+/* Aurora SVG background */
+#desktop.wallpaper-aurora::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, transparent 60%, rgba(0, 0, 0, 0.3) 100%);
+  pointer-events: none;
+}
+
+/* Grid wallpaper dots */
+#desktop.wallpaper-grid::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle, rgba(255,255,255,0.12) 1px, transparent 1px);
+  background-size: 24px 24px;
+  pointer-events: none;
+}
+
+/* ---------------------------------------------------------
+   App Icon SVG Styles (used inline in icon-img)
+   --------------------------------------------------------- */
+.app-icon-bg {
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+}
