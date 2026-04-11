@@ -210,25 +210,34 @@ const boot = async () => {
     // Apply saved prefs before anything shows
     applyPrefs();
 
-    // Init core systems in parallel where possible
-    await Promise.all([
+    // Build appMap (object keyed by id) — required by WindowManager, Taskbar, Desktop, etc.
+    const appMap = {};
+    APP_REGISTRY.forEach(app => { appMap[app.id] = app; });
+
+    // Init filesystem with 8s timeout fallback
+    await Promise.race([
       FS.init().then(async () => {
-        // Seed filesystem if first boot
         const seeded = localStorage.getItem('os_fs_seeded');
         if (!seeded) {
           await seedFilesystem();
           localStorage.setItem('os_fs_seeded', '1');
         }
       }),
-    ]);
+      new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('FS init timed out after 8s')), 8000)
+      ),
+    ]).catch(err => {
+      // Non-fatal: log and continue without FS
+      console.warn('[BrowserOS] FS init failed, continuing without persistence:', err);
+    });
 
-    // Init UI systems
+    // Init UI systems — all take (WindowManager, appMap) except Notifications/Workspaces
     Notifications.init();
-    WindowManager.init();
-    Taskbar.init(APP_REGISTRY);
-    Desktop.init(APP_REGISTRY);
-    CommandPalette.init(APP_REGISTRY);
-    Workspaces.init();
+    WindowManager.init(appMap);
+    Taskbar.init(WindowManager, appMap);
+    Desktop.init(WindowManager, appMap);
+    CommandPalette.init(WindowManager, appMap);
+    Workspaces.init(WindowManager);
 
     // Wire EventBus handlers
     wireEvents();
