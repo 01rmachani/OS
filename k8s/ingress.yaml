@@ -1,0 +1,58 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Traefik Ingress for chat-app
+#
+# The Next.js app is built with basePath=/chat-app, so it handles the /chat-app
+# prefix itself.  Do NOT add a strip-prefix middleware here — Traefik should
+# forward the full path (including /chat-app) to the service.
+#
+# Choose ONE of the two options below based on your cluster setup.
+# ─────────────────────────────────────────────────────────────────────────────
+
+# ── Option A: Traefik IngressRoute CRD (recommended) ─────────────────────────
+# Requires Traefik v2+ with CRDs installed (traefik.io/v1alpha1).
+# Install CRDs: https://doc.traefik.io/traefik/providers/kubernetes-crd/
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: chat-app
+  namespace: default
+  labels:
+    app: chat-app
+spec:
+  entryPoints:
+    - web          # Change to "websecure" for HTTPS
+  routes:
+    - match: PathPrefix(`/chat-app`)
+      kind: Rule
+      services:
+        - name: chat-app
+          port: 80
+
+# ── Option B: Standard Kubernetes Ingress with Traefik annotations ────────────
+# Use this if your cluster does not have Traefik CRDs installed.
+# Delete Option A above and uncomment Option B.
+#
+# ---
+# apiVersion: networking.k8s.io/v1
+# kind: Ingress
+# metadata:
+#   name: chat-app
+#   namespace: default
+#   labels:
+#     app: chat-app
+#   annotations:
+#     kubernetes.io/ingress.class: traefik
+#     # Route rule — no strip-prefix middleware needed
+#     traefik.ingress.kubernetes.io/router.entrypoints: web
+# spec:
+#   rules:
+#     - http:
+#         paths:
+#           - path: /chat-app
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: chat-app
+#                 port:
+#                   number: 80

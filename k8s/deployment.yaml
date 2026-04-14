@@ -1,0 +1,94 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chat-app
+  namespace: default
+  labels:
+    app: chat-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: chat-app
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0        # zero-downtime rolling updates
+  template:
+    metadata:
+      labels:
+        app: chat-app
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+        fsGroup: 1001
+      containers:
+        - name: chat-app
+          # Replace with your actual image registry + tag
+          image: your-registry/chat-app:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+              protocol: TCP
+          env:
+            - name: NODE_ENV
+              value: "production"
+            - name: PORT
+              value: "3000"
+            - name: HOSTNAME
+              value: "0.0.0.0"
+            # Provider config from ConfigMap
+            - name: AI_PROVIDER
+              valueFrom:
+                configMapKeyRef:
+                  name: chat-app-config
+                  key: AI_PROVIDER
+            - name: AI_MODEL
+              valueFrom:
+                configMapKeyRef:
+                  name: chat-app-config
+                  key: AI_MODEL
+            - name: AI_BASE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: chat-app-config
+                  key: AI_BASE_URL
+            # API key from Secret
+            - name: AI_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: chat-app-secrets
+                  key: ai-api-key
+                  optional: true    # Ollama doesn't need a key
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+          # Probes hit <basePath>/api/health — must match the BASE_PATH baked into the image.
+          livenessProbe:
+            httpGet:
+              path: /chat-app/api/health
+              port: 3000
+            initialDelaySeconds: 15
+            periodSeconds: 20
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /chat-app/api/health
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            failureThreshold: 3
+          securityContext:
+            allowPrivilegeEscalation: false
+            # Next.js standalone writes to /tmp at runtime, so root FS cannot be read-only
+            # without an explicit emptyDir /tmp mount.
+            readOnlyRootFilesystem: false
+            capabilities:
+              drop: ["ALL"]
+      terminationGracePeriodSeconds: 30

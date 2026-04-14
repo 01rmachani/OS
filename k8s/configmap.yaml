@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: chat-app-config
+  namespace: default
+  labels:
+    app: chat-app
+data:
+  # AI provider selection — see .env.local.example for all options
+  AI_PROVIDER: "openai"
+  # Model name for the selected provider
+  AI_MODEL: "gpt-4o-mini"
+  # Base URL — required for ollama / openrouter / custom providers; leave empty for openai/anthropic
+  AI_BASE_URL: ""
