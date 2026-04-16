@@ -62,6 +62,13 @@ spec:
                   name: chat-app-secrets
                   key: ai-api-key
                   optional: true    # Ollama doesn't need a key
+            # Optional: GitHub token for the AI GitHub tools (60 req/hr without)
+            - name: GITHUB_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: chat-app-secrets
+                  key: github-token
+                  optional: true
           resources:
             requests:
               cpu: "100m"
@@ -69,7 +76,7 @@ spec:
             limits:
               cpu: "500m"
               memory: "512Mi"
-          # Probes hit <basePath>/api/health — must match the BASE_PATH baked into the image.
+          # Probes hit <basePath>/api/health — must match the DKUBEX_BASE_PATH baked into the image.
           livenessProbe:
             httpGet:
               path: /chat-app/api/health

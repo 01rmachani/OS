@@ -1,0 +1,37 @@
+replicaCount: 1
+
+image:
+  repository: your-registry/chat-app
+  pullPolicy: Always
+  tag: "latest"
+
+service:
+  port: 3000
+
+# Hostname the HTTPRoute will match. Use "*" to match all hosts.
+hostname: "*"
+
+# DKubeX base path — baked into the Next.js bundle at build time.
+# The image must be built with: --build-arg DKUBEX_BASE_PATH=/chat-app
+basePath: "/chat-app"
+
+# AI provider configuration
+ai:
+  provider: "openai"   # openai | anthropic | ollama | openrouter | custom
+  model: "gpt-4o-mini"
+  apiKey: ""           # or use existingSecret below
+  baseUrl: ""          # required for ollama / openrouter / custom
+
+# Optional: reference an existing Secret instead of putting the key in values
+existingSecret:
+  name: ""
+  apiKeyField: "ai-api-key"
+
+# Optional: GitHub personal access token for the AI tools
+# Unauthenticated requests are rate-limited to 60/hr per IP.
+github:
+  token: ""
+
+# Injected automatically by DKubeX when dependencies are declared in Chart.yaml
+postgres:
+  db_url: ""

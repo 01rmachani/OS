@@ -11,11 +11,11 @@ RUN npm ci
 FROM node:22-alpine AS builder
 WORKDIR /app
 
-# BASE_PATH is baked into the Next.js bundle at build time.
-# Pass with: docker build --build-arg BASE_PATH=/chat-app ...
+# DKUBEX_BASE_PATH is baked into the Next.js bundle at build time.
+# Pass with: docker build --build-arg DKUBEX_BASE_PATH=/chat-app ...
 # Leave empty for local/dev images (app will run at /).
-ARG BASE_PATH=""
-ENV BASE_PATH=$BASE_PATH
+ARG DKUBEX_BASE_PATH=""
+ENV DKUBEX_BASE_PATH=$DKUBEX_BASE_PATH
 
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .

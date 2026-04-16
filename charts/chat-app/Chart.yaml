@@ -1,0 +1,30 @@
+apiVersion: v2
+name: chat-app
+description: AI-powered developer chat with GitHub issues and PR integration
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
+annotations:
+  dkubex: |
+    url: "/chat-app"
+    displayName: "AI Dev Chat"
+    icon: "https://raw.githubusercontent.com/dkubeio/chat-app/main/assets/icon.svg"
+    docs: "https://dkubeio.github.io/docs-site/components/chat-app/"
+    images:
+      - "https://raw.githubusercontent.com/dkubeio/chat-app/main/assets/screenshot-1.png"
+    video: ""
+    description: "AI-powered developer chat with GitHub issues and PR integration, built on the Vercel AI SDK."
+    categories:
+      - "Developer Tools"
+      - "AI / ML"
+    roles:
+      - "admin"
+      - "user"
+    resources:
+      cpu:
+        min: "100m"
+        recommended: "250m"
+      memory:
+        min: "128Mi"
+        recommended: "512Mi"
+    dependencies: []
